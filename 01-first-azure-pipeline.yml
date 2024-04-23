@@ -6,7 +6,7 @@
 trigger:
 - main
 
-pool: my poko laptop
+pool: tansen-poko
 
 steps:
 - script: echo Hello, world!
