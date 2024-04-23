@@ -11,27 +11,27 @@ pool: my poko laptop
 jobs:
   - job: Job1
     steps:
-      - script: echo Job1 - Hello, world, changed!
-        displayName: "Run a one-line script"
+      - script: Hello world
+        displayName: "this is for first job"
       - script: |
-          echo Add other tasks to build, test, and deploy your project.
-          echo See https://aka.ms/yaml
-          echo more information
-        displayName: "Run a multi-line script"
+          echo here we are running more than one script so the | is present.
+          echo second script
+          echo third script
+        displayName: "this is for second job"
   - job: Job2
     dependsOn: Job1
     steps:
-      - script: echo Job2!
-        displayName: "Run a one-line script"
+      - script: echo Job2 script 1 and it's depends on first job!
+        displayName: "this is the display name of job2"
   - job: Job3
     dependsOn: Job1
     steps:
-      - script: echo Job3!
-        displayName: "Run a one-line script"
+      - script: echo Job3 script 1 depends on job 1
+        displayName: "this is for second job"
   - job: Job4
     dependsOn:
       - Job2
       - Job3
     steps:
-      - script: echo Job3!
-        displayName: "Run a one-line script"
+      - script: echo Job4 script 1 it's depends on job2 and job3
+        displayName: "job4 script 1"
