@@ -9,45 +9,27 @@ stages:
       - job: FirstJob
         steps:
           - bash: echo Build FirstJob
-          - bash: echo pokemon poko
-          - bash: echo huhu
-          - bash: echo test again
-          - task: CopyFiles@2
-            inputs:
-              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
-              ArtifactName: "drop"
-              publishLocation: "Pipeline"
       - job: SecondJob
         steps:
           - bash: echo Build SecondJob
   - stage: DevDeploy
-    variables:
-      environment: Dev
     dependsOn: Build
     jobs:
       - job: DevDeployJob
         steps:
-          - download: current
-            artifact: drop
-          - bash: echo $(environment)DeployJob
+          - bash: echo DevDeployJob
   - stage: QADeploy
-    variables:
-      environment: QA
     dependsOn:
       - Build
       - DevDeploy
     jobs:
       - job: QADeployJob
         steps:
-          - download: current
-            artifact: drop
-          - bash: echo $(environment)DeployJob
+          - bash: echo QADeployJob
   - stage: ProdDeploy
     dependsOn:
       - QADeploy
     jobs:
       - job: ProdDeployJob
         steps:
-          - download: current
-            artifact: drop
           - bash: echo ProdDeployJob
