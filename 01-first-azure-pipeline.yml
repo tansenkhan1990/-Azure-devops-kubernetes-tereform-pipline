@@ -10,7 +10,7 @@ pool: tansen-poko
 
 steps:
   - script: echo Hello, world!
-    displayName: "Run a one-line script"
+    displayName: "Run a one-line script to test the pipeline"
 
   - script: |
       echo Add other tasks to build, test, and deploy your project.
