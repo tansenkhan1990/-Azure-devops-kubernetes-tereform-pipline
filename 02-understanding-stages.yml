@@ -1,7 +1,8 @@
 trigger:
   - master
 
-pool:tansen-poko
+pool:
+  vmImage: "ubuntu-latest"
 
 stages:
   - stage: Build
@@ -21,3 +22,70 @@ stages:
           - bash: node --version
           - bash: python --version
           - bash: mvn -version
+          - bash: ls -R $(Build.ArtifactStagingDirectory)
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: "$(System.DefaultWorkingDirectory)"
+              Contents: |
+                **/*.yaml
+                **/*.tf
+              TargetFolder: "$(Build.ArtifactStagingDirectory)"
+          - bash: ls -R $(Build.ArtifactStagingDirectory)
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: "drop"
+              publishLocation: "Container"
+# trigger:
+#   - master
+
+# pool: tansen-poko
+
+# stages:
+#   - stage: Build
+#     jobs:
+#       - job: FirstJob
+#         steps:
+#           - bash: echo Build FirstJob
+#           - bash: echo pokemon poko
+#           - bash: echo huhu
+#           - bash: echo test again
+#           - task: CopyFiles@2
+#             inputs:
+#               PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+#               ArtifactName: "drop"
+#               publishLocation: "Pipeline"
+#       - job: SecondJob
+#         steps:
+#           - bash: echo Build SecondJob
+#   - stage: DevDeploy
+#     variables:
+#       environment: Dev
+#     dependsOn: Build
+#     jobs:
+#       - job: DevDeployJob
+#         steps:
+#           - download: current
+#             artifact: drop
+#           - bash: echo $(environment)DeployJob
+#   - stage: QADeploy
+#     variables:
+#       environment: QA
+#     dependsOn:
+#       - Build
+#       - DevDeploy
+#     jobs:
+#       - job: QADeployJob
+#         steps:
+#           - download: current
+#             artifact: drop
+#           - bash: echo $(environment)DeployJob
+#   - stage: ProdDeploy
+#     dependsOn:
+#       - QADeploy
+#     jobs:
+#       - job: ProdDeployJob
+#         steps:
+#           - download: current
+#             artifact: drop
+#           - bash: echo ProdDeployJob
